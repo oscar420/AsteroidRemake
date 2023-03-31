@@ -6,24 +6,82 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class ASTEROIDREMAKE_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
+	
 	ASCharacter();
 
 protected:
-	// Called when the game starts or when spawned
+	
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CamaraComp;
+	
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* SMesh;
+	
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArmComp;
+
+	/** Bound to the thrust axis */
+	void Thrust(float Val);
+	
+	/** Bound to the vertical axis */
+	void MoveUp(float Val);
+
+	/** Bound to the horizontal axis */
+	void MoveRight(float Val);
+
 public:	
-	// Called every frame
+	
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+
+	UPROPERTY()
+	float Roll;
+
+	
+	UPROPERTY()
+	float Pitch;
+	
+	/** How quickly forward speed changes */
+	UPROPERTY(Category=Plane, EditAnywhere)
+	float Acceleration;
+
+	/** How quickly pawn can steer */
+	UPROPERTY(Category=Plane, EditAnywhere)
+	float TurnSpeed;
+
+	/** Max forward speed */
+	UPROPERTY(Category = Pitch, EditAnywhere)
+	float MaxSpeed;
+
+	/** Min forward speed */
+	UPROPERTY(Category=Yaw, EditAnywhere)
+	float MinSpeed;
+
+	/** Current forward speed */
+	float CurrentForwardSpeed;
+
+	/** Current yaw speed */
+	float CurrentYawSpeed;
+
+	/** Current pitch speed */
+	float CurrentPitchSpeed;
+
+	/** Current roll speed */
+	float CurrentRollSpeed;
 
 };

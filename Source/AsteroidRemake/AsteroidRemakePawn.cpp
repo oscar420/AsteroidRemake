@@ -124,6 +124,8 @@ void AAsteroidRemakePawn::MoveRightInput(float Val)
 	// Is there any left/right input?
 	const bool bIsTurning = FMath::Abs(Val) > 0.2f;
 
+	
+
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value.
 	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
