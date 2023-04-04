@@ -2,6 +2,8 @@
 
 
 #include "SCharacter.h"
+
+#include "SActionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -26,6 +28,9 @@ ASCharacter::ASCharacter()
 	CamaraComp->SetupAttachment(SpringArmComp);
 
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
+	//Create Action Component
+	ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
 	
 	// Set handling parameters
 	Acceleration = 500.f;
@@ -35,6 +40,7 @@ ASCharacter::ASCharacter()
 	CurrentForwardSpeed = 500.f;
 
 }
+
 
 // Called when the game starts or when spawned
 void ASCharacter::BeginPlay()
@@ -64,7 +70,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APawn::AddControllerYawInput);
-	PlayerInputComponent-> BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction(TEXT("PrimaryAttack"), IE_Pressed, this, &ASCharacter::PrimaryAttack);
 
 }
 
@@ -110,4 +118,10 @@ void ASCharacter::MoveRight(float Val)
 	UE_LOG(LogTemp, Warning, TEXT("Current Yaw Speed: %f"), RelativeRotation.Pitch);
 	SMesh->SetRelativeRotation(FRotator(-(RelativeRotation.Pitch),SMesh->GetRelativeRotation().Yaw,SMesh->GetRelativeRotation().Roll));
 	
+}
+
+void ASCharacter::PrimaryAttack()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Character: %s"), *GetNameSafe(this));
+	ActionComp->StartActionByName(this, "PrimaryAttack");
 }

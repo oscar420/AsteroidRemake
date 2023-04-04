@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USActionComponent;
 
 UCLASS()
 class ASTEROIDREMAKE_API ASCharacter : public ACharacter
@@ -19,14 +20,16 @@ public:
 	ASCharacter();
 
 protected:
+
+	void PrimaryAttack();
 	
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Actions")
+	USActionComponent* ActionComp;
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CamaraComp;
-	
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* SMesh;
 	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -46,6 +49,9 @@ public:
 
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* SMesh;
 
 private:
 
