@@ -8,6 +8,8 @@
 
 class UStaticMeshComponent;
 class USphereComponent;
+class URotatingMovementComponent;
+class UProjectileMovementComponent;
 
 UCLASS()
 class ASTEROIDREMAKE_API ASAsteroid : public AActor
@@ -22,11 +24,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	USphereComponent* SphereComp;
 
 	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(EditDefaultsOnly, Category="Components")
+	URotatingMovementComponent* RotComp;
+
+	UPROPERTY(EditDefaultsOnly, Category="Components")
+	UProjectileMovementComponent* ProjectileMoveComp;
 	
 
 public:	

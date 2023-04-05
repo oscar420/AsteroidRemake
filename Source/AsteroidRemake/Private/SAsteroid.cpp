@@ -4,6 +4,8 @@
 #include "SAsteroid.h"
 
 #include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/RotatingMovementComponent.h"
 
 // Sets default values
 ASAsteroid::ASAsteroid()
@@ -16,6 +18,14 @@ ASAsteroid::ASAsteroid()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(SphereComp);
+
+	RotComp = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotatingComp"));
+	FRotator RotationRate= FRotator(FMath::RandRange(1.f, 4.f), FMath::RandRange(1.f, 4.f), FMath::RandRange(1.f, 4.f));
+	RotComp->RotationRate = RotationRate;
+
+	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovComp"));
+	ProjectileMoveComp->InitialSpeed = FMath::RandRange(100.f, 1000.f);
+	ProjectileMoveComp->ProjectileGravityScale = 0.f;
 
 }
 
