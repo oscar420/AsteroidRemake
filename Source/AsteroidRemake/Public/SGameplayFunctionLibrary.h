@@ -16,10 +16,10 @@ class ASTEROIDREMAKE_API USGameplayFunctionLibrary : public UBlueprintFunctionLi
 
 public:
 
-	/*UFUNCTION(BlueprintCallable, Category="Gameplay")
+	UFUNCTION(BlueprintCallable, Category="Gameplay")
 	static bool ApplyDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount);
 
 	UFUNCTION(BlueprintCallable, Category="Gameplay")
-	static bool ApplyDirectionalDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount, const FHitResult& HitResult);*/
+	static bool ApplyDirectionalDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount, const FHitResult& HitResult);
 	
 };

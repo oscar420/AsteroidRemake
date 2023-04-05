@@ -4,6 +4,7 @@
 #include "SBasicProjectile.h"
 
 #include "SActionComponent.h"
+#include "SGameplayFunctionLibrary.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -29,14 +30,9 @@ void ASBasicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		USActionComponent* ActionComp = Cast<USActionComponent>(OtherActor->GetComponentByClass(USActionComponent::StaticClass()));
 		
-		/*if (USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(), OtherActor, DamageAmount, SweepResult))
+		if (USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(), OtherActor, DamageAmount, SweepResult))
 		{
 			Explode();
-
-			/*if (ActionComp && HasAuthority())
-			{
-				ActionComp->AddAction(GetInstigator(), ActionEffectClass);
-			}#1#
-		}*/
+		}
 	}
 }

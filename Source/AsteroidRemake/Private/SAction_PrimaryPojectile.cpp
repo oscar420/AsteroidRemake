@@ -64,7 +64,6 @@ void USAction_PrimaryPojectile::StartAction_Implementation(AActor* Instigator)
 		//spawning is always done through the world
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM1, SpawnParams);
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM2, SpawnParams);
-		//UGameplayStatics::SpawnEmitterAttached(ShootEffect, GetMesh(), TEXT("Muzzle_01"), FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 	}
 
 	StopAction(Character);

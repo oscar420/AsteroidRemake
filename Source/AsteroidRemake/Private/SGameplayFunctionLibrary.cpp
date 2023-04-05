@@ -3,15 +3,17 @@
 
 #include "SGameplayFunctionLibrary.h"
 
-/*bool USGameplayFunctionLibrary::ApplyDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount)
+#include "SAttributeComponent.h"
+
+bool USGameplayFunctionLibrary::ApplyDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount)
 {
-	/*USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(TargetActor);
+	USAttributeComponent* AttributeComp = USAttributeComponent::GetAttribute(TargetActor);
 	if (AttributeComp)
 	{
 		return AttributeComp->ApplyHealthChange(DamageCauser, -DamageAmount);
 	}
 
-	return false;#1#
+	return false;
 }
 
 bool USGameplayFunctionLibrary::ApplyDirectionalDamage(AActor* DamageCauser, AActor* TargetActor, float DamageAmount,
@@ -33,4 +35,4 @@ bool USGameplayFunctionLibrary::ApplyDirectionalDamage(AActor* DamageCauser, AAc
 	}
 
 	return false;
-}*/
+}

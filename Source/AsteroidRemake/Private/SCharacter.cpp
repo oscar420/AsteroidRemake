@@ -4,9 +4,11 @@
 #include "SCharacter.h"
 
 #include "SActionComponent.h"
+#include "SAttributeComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -29,8 +31,15 @@ ASCharacter::ASCharacter()
 
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
-	//Create Action Component
+	// Create Action Component
 	ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
+
+	// Create Attribute Component
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>(TEXT("AttributeComp"));
+
+	// Create Fly Effect Component
+	FlyEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FlyEffect"));
+	FlyEffect->SetupAttachment(SMesh);
 	
 	// Set handling parameters
 	Acceleration = 500.f;
@@ -38,6 +47,7 @@ ASCharacter::ASCharacter()
 	MaxSpeed = 4000.f;
 	MinSpeed = 500.f;
 	CurrentForwardSpeed = 500.f;
+	UpMaxVelocity = 1000.f;
 
 }
 
@@ -46,6 +56,8 @@ ASCharacter::ASCharacter()
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FlyEffect->Deactivate();
 	
 	Roll = SMesh->GetRelativeRotation().Yaw;
 	Pitch = SMesh->GetRelativeRotation().Pitch;
@@ -56,6 +68,12 @@ void ASCharacter::BeginPlay()
 void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (CurrentUpVelocity != 0.0f)
+	{
+		FVector NewLocation = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + (CurrentUpVelocity * DeltaTime));
+		this->SetActorLocation(NewLocation);
+	}
 
 }
 
@@ -79,21 +97,21 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 // Move Ship Forwards/Backwards
 void ASCharacter::Thrust(float Val)
 {
+	if (Val == 0.f)
+	{
+		FlyEffect->Deactivate();
+	}
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Roll = 0.0f;
 	
+	FlyEffect->Activate(true);
 	AddMovementInput(ControlRot.Vector(), Val);
 }
 
 
 void ASCharacter::MoveUp(float Val)
 {
-	FRotator Rotation = SMesh->GetRelativeRotation();
-	Rotation.Pitch = 0.0f;
-	Rotation.Yaw = 0.0f;
-	
-
-	AddMovementInput(Rotation.Vector() * 50, Val);
+	CurrentUpVelocity = UpMaxVelocity * Val;
 }
 
 // Move Ship to the Right/Left

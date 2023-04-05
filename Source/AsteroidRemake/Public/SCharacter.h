@@ -9,6 +9,8 @@
 class UCameraComponent;
 class USpringArmComponent;
 class USActionComponent;
+class USAttributeComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class ASTEROIDREMAKE_API ASCharacter : public ACharacter
@@ -21,9 +23,17 @@ public:
 
 protected:
 
-	void PrimaryAttack();
+	UPROPERTY(EditDefaultsOnly, Category="Movement")
+	float CurrentUpVelocity;
 	
-	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, Category="Movement")
+	float UpMaxVelocity;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Effects")
+	UParticleSystemComponent* FlyEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	USAttributeComponent* AttributeComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Actions")
 	USActionComponent* ActionComp;
@@ -34,14 +44,22 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
+	void PrimaryAttack();
+	
+	virtual void BeginPlay() override;
+	
+	/*UFUNCTION()
+	void OnHealthChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewValue, float Delta);*/
+
 	/** Bound to the thrust axis */
 	void Thrust(float Val);
-	
+
 	/** Bound to the vertical axis */
 	void MoveUp(float Val);
 
 	/** Bound to the horizontal axis */
 	void MoveRight(float Val);
+
 
 public:	
 	
