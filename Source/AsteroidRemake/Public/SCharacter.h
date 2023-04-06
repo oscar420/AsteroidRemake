@@ -23,8 +23,14 @@ public:
 
 protected:
 
+	UFUNCTION()
+	void OnHealtChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
+
 	UPROPERTY(EditDefaultsOnly, Category="Movement")
 	float CurrentUpVelocity;
+
+	UPROPERTY(EditDefaultsOnly)
+	UCapsuleComponent* CapsuleComp;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Movement")
 	float UpMaxVelocity;
@@ -64,12 +70,11 @@ protected:
 public:	
 	
 	virtual void Tick(float DeltaTime) override;
-
 	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* SMesh;
+	
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 

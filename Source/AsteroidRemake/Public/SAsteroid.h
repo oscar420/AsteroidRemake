@@ -7,9 +7,10 @@
 #include "SAsteroid.generated.h"
 
 class UStaticMeshComponent;
-class USphereComponent;
+class UCapsuleComponent;
 class URotatingMovementComponent;
 class UProjectileMovementComponent;
+class USAttributeComponent;
 
 UCLASS()
 class ASTEROIDREMAKE_API ASAsteroid : public AActor
@@ -24,10 +25,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	USphereComponent* SphereComp;
+	UFUNCTION()
+	void OnHealtChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	USAttributeComponent* AttributeComp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UCapsuleComponent* CapsuleComp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditDefaultsOnly, Category="Components")
@@ -36,6 +43,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Components")
 	UProjectileMovementComponent* ProjectileMoveComp;
 	
+	UFUNCTION()
+	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
 	// Called every frame

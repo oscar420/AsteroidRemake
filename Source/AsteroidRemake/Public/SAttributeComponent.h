@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "SAttributeComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealtChange, AActor*, InstigatorActor, class USAttributeComponent*, OwningComp, float, NewHealth, float, Delta);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealthChange, AActor*, InstigatorActor, class USAttributeComponent*, OwningComp, float, NewHealth, float, Delta);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ASTEROIDREMAKE_API USAttributeComponent : public UActorComponent
@@ -28,7 +28,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Replicated, BlueprintReadOnly, Category="Attribute")
 	float MaxHealth;
 
-	UPROPERTY(EditDefaultsOnly, Replicated, BlueprintReadOnly, Category="Attribute")
+	UPROPERTY(EditDefaultsOnly, Replicated, BlueprintReadWrite, Category="Attribute")
 	float Health;
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -40,7 +40,7 @@ public:
 	bool IsAlive() const;
 
 	UPROPERTY(BlueprintAssignable)
-	FOnHealtChange OnHealtChange;
+	FOnHealthChange OnHealtChange;
 
 	UFUNCTION(BlueprintCallable, Category="Attribute")
 	bool ApplyHealthChange(AActor* InstigatorActor, float Delta);

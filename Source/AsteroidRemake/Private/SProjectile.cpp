@@ -16,7 +16,7 @@ ASProjectile::ASProjectile()
 
 	
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	SphereComp->SetCollisionProfileName(TEXT("Projectile"));
+	//SphereComp->SetCollisionProfileName(TEXT("Projectile"));
 	RootComponent = SphereComp;
 	
  
@@ -82,7 +82,6 @@ void ASProjectile::ActivateEffects()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), GetActorRotation());
-	UE_LOG(LogTemp, Warning, TEXT("CameraShake"));
 	UGameplayStatics::PlayWorldCameraShake(GetWorld(), ImpactShake, GetActorLocation(), ImpactShakeInnerRadius, ImpactShakeOuterRadius);
 	
 	
