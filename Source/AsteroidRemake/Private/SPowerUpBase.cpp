@@ -3,25 +3,68 @@
 
 #include "SPowerUpBase.h"
 
+#include "Components/SphereComponent.h"
+#include "Net/UnrealNetwork.h"
+
 // Sets default values
 ASPowerUpBase::ASPowerUpBase()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 
 	PrimaryActorTick.bCanEverTick = true;
 
+	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+	RootComponent = SphereComp;
+
+	RespawnTime = 10.f;
+
+	bIsActive = true;
+
+	bReplicates = true;
 }
 
-// Called when the game starts or when spawned
-void ASPowerUpBase::BeginPlay()
+void ASPowerUpBase::Interact_Implementation(APawn* InstigatorPawn)
 {
-	Super::BeginPlay();
+	// logic in derived classes
+}
+
+void ASPowerUpBase::ShowPowerUp()
+{
+	SetPowerUpState(true);
+}
+
+void ASPowerUpBase::HideAndCooldownPowerUp()
+{
 	
+	SetPowerUpState(false);
+
+	GetWorldTimerManager().SetTimer(TimerHandle_SpawnDelay, this, &ASPowerUpBase::ShowPowerUp, RespawnTime);
 }
 
-// Called every frame
-void ASPowerUpBase::Tick(float DeltaTime)
+void ASPowerUpBase::SetPowerUpState(bool bNewIsActive)
 {
-	Super::Tick(DeltaTime);
+	bIsActive = bNewIsActive;
 
+	OnRep_IsActive();
 }
+
+void ASPowerUpBase::OnRep_IsActive()
+{
+	SetActorEnableCollision(bIsActive);
+	
+	// Set visibility on root and all children
+	RootComponent->SetVisibility(bIsActive, true);
+}
+
+void ASPowerUpBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASPowerUpBase, bIsActive);
+}
+
+FText ASPowerUpBase::GetInteractText_Implementation(APawn* InstigatorPawn)
+{
+	return FText::GetEmpty();
+}
+
 

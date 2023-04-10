@@ -5,6 +5,7 @@
 
 #include "SActionComponent.h"
 #include "SAttributeComponent.h"
+#include "SInteractionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -17,8 +18,12 @@ ASCharacter::ASCharacter()
  	
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create Capsule Component
 	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
 	CapsuleComp->SetupAttachment(RootComponent);
+
+	// Create Interaction Component
+	InteractionComp = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComp"));
 
 	// Create static mesh component
 	SMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
@@ -96,20 +101,19 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction(TEXT("PrimaryAttack"), IE_Pressed, this, &ASCharacter::PrimaryAttack);
+	PlayerInputComponent->BindAction(TEXT("PrimaryAttack"), IE_Pressed, this, &ASCharacter::PrimaryAttackPowerUp);
+	PlayerInputComponent->BindAction(TEXT("PrimaryInteraction"), IE_Pressed, this, &ASCharacter::PrimaryInteraction);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &ASCharacter::SprintStart);
+	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &ASCharacter::sprintStop);
 
 }
 
 // Move Ship Forwards/Backwards
 void ASCharacter::Thrust(float Val)
 {
-	if (Val == 0.f)
-	{
-		FlyEffect->Deactivate();
-	}
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Roll = 0.0f;
 	
-	FlyEffect->Activate(true);
 	AddMovementInput(ControlRot.Vector(), Val);
 }
 
@@ -142,10 +146,35 @@ void ASCharacter::MoveRight(float Val)
 	
 }
 
+void ASCharacter::SprintStart()
+{
+	ActionComp->StartActionByName(this, TEXT("Sprint"));
+}
+
+void ASCharacter::sprintStop()
+{
+	ActionComp->StopActionByName(this, TEXT("Sprint"));
+}
+
+void ASCharacter::PrimaryInteraction()
+{
+	InteractionComp->PrimaryInteraction();
+}
+
+FVector ASCharacter::GetPawnViewLocation() const
+{
+	return CamaraComp->GetComponentLocation();
+}
+
 void ASCharacter::PrimaryAttack()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Character: %s"), *GetNameSafe(this));
 	ActionComp->StartActionByName(this, "PrimaryAttack");
+}
+
+void ASCharacter::PrimaryAttackPowerUp()
+{
+	ActionComp->StartActionByName(this, "PrimaryAttackPowerUp");
 }
 
 void ASCharacter::OnHealtChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)

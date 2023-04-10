@@ -11,6 +11,7 @@ class USpringArmComponent;
 class USActionComponent;
 class USAttributeComponent;
 class UParticleSystemComponent;
+class USInteractionComponent;
 
 UCLASS()
 class ASTEROIDREMAKE_API ASCharacter : public ACharacter
@@ -29,6 +30,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Movement")
 	float CurrentUpVelocity;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Components")
+	USInteractionComponent* InteractionComp;
+
 	UPROPERTY(EditDefaultsOnly)
 	UCapsuleComponent* CapsuleComp;
 	
@@ -43,9 +47,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Actions")
 	USActionComponent* ActionComp;
-
-	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* CamaraComp;
+	
 	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -57,17 +59,29 @@ protected:
 	/*UFUNCTION()
 	void OnHealthChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewValue, float Delta);*/
 
-	/** Bound to the thrust axis */
+	
 	void Thrust(float Val);
 
-	/** Bound to the vertical axis */
+	
 	void MoveUp(float Val);
 
-	/** Bound to the horizontal axis */
+	
 	void MoveRight(float Val);
 
+	void PrimaryInteraction();
 
-public:	
+	void PrimaryAttackPowerUp();
+
+	void SprintStart();
+
+	void sprintStop();
+
+	virtual FVector GetPawnViewLocation() const override;
+
+
+public:
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CamaraComp;
 	
 	virtual void Tick(float DeltaTime) override;
 	

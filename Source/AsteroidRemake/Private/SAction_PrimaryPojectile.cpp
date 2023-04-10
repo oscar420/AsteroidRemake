@@ -42,8 +42,12 @@ void USAction_PrimaryPojectile::StartAction_Implementation(AActor* Instigator)
 		ObjParams.AddObjectTypesToQuery(ECC_PhysicsBody);
 		
 		FHitResult Hit;
-	
-		FVector TraceStart = Character->GetPawnViewLocation();
+		ACharacter* InstigatorCharacter = Cast<ACharacter>(Instigator);
+		if (!InstigatorCharacter)
+		{
+			return;
+		}
+		FVector TraceStart = InstigatorCharacter->GetPawnViewLocation();
 		//FRotator CameraRotator = CamaraComp->GetComponentRotation();
 		FVector TraceEnd = TraceStart + (Character->GetControlRotation().Vector() * Range);
 		

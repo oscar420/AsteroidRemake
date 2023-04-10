@@ -3,24 +3,49 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SGameplayInterface.h"
 #include "GameFramework/Actor.h"
 #include "SPowerUpBase.generated.h"
 
+class USphereComponent;
+class UStaticMesh;
+
 UCLASS()
-class ASTEROIDREMAKE_API ASPowerUpBase : public AActor
+class ASTEROIDREMAKE_API ASPowerUpBase : public AActor, public ISGameplayInterface
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
+	
 	ASPowerUpBase();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(ReplicatedUsing="OnRep_IsActive", BlueprintReadOnly)
+	bool bIsActive;
 
+	UFUNCTION()
+	void OnRep_IsActive();
+
+	UPROPERTY(EditAnywhere, Category="PowerUp")
+	float RespawnTime;
+
+	FTimerHandle TimerHandle_SpawnDelay;
+	
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* SphereComp; 
+
+	UFUNCTION()
+	void ShowPowerUp();
+
+	void HideAndCooldownPowerUp();
+
+	void SetPowerUpState(bool bNewIsActive);
+
+public:
+	
+	void Interact_Implementation(APawn* InstigatorPawn) override;
+
+	FText GetInteractText_Implementation(APawn* InstigatorPawn);
+	
 };
