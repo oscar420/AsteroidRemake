@@ -26,9 +26,7 @@ protected:
 
 	UFUNCTION()
 	void OnHealtChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
-
-	UPROPERTY(EditDefaultsOnly, Category="Movement")
-	float CurrentUpVelocity;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Components")
 	USInteractionComponent* InteractionComp;
@@ -36,9 +34,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UCapsuleComponent* CapsuleComp;
 	
-	UPROPERTY(EditDefaultsOnly, Category="Movement")
-	float UpMaxVelocity;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Effects")
 	UParticleSystemComponent* FlyEffect;
 
@@ -85,7 +80,7 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Replicated)
 	UStaticMeshComponent* SMesh;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

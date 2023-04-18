@@ -40,7 +40,7 @@ void USAction_ProjectilePowerUp::StartAction_Implementation(AActor* Instigator)
 			return;
 		}
 		FVector TraceStart = InstigatorCharacter->GetPawnViewLocation();
-		//FRotator CameraRotator = CamaraComp->GetComponentRotation();
+	
 		FVector TraceEnd = TraceStart + (Character->GetControlRotation().Vector() * Range);
 		
 		bool bSucces = GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjParams, Shape, QueryParams);
@@ -48,7 +48,7 @@ void USAction_ProjectilePowerUp::StartAction_Implementation(AActor* Instigator)
 		if (bSucces)
 		{
 			TraceEnd = Hit.ImpactPoint;
-			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 32, FColor::Green, false, 2.0f);
+			//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 32, FColor::Green, false, 2.0f);
 		}
 	
 		

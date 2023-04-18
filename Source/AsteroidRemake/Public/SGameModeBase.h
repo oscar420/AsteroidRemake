@@ -13,5 +13,14 @@ UCLASS()
 class ASTEROIDREMAKE_API ASGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+
+	ASGameModeBase();
+
+	virtual void OnActorKilled(AActor* VictimActor, AActor* Killer);
+	
+	UFUNCTION()
+	void RespawnPlayerElpased(AController* Controller);
 	
 };

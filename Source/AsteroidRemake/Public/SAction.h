@@ -16,6 +16,8 @@ struct FActionRepData
 
 public:
 
+	FActionRepData(){Instigator = nullptr; bIsRunning = false;}
+
 	UPROPERTY()
 	AActor* Instigator;
 
@@ -52,7 +54,6 @@ protected:
 
 	UPROPERTY(ReplicatedUsing="OnRep_RepData")
 	FActionRepData RepData;
-	//bool bIsRunning
 
 	UFUNCTION()
 	void OnRep_RepData();

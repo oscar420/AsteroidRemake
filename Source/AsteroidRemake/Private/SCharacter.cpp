@@ -10,6 +10,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
@@ -57,8 +58,6 @@ ASCharacter::ASCharacter()
 	MaxSpeed = 4000.f;
 	MinSpeed = 500.f;
 	CurrentForwardSpeed = 500.f;
-	UpMaxVelocity = 1000.f;
-
 }
 
 
@@ -79,12 +78,6 @@ void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CurrentUpVelocity != 0.0f)
-	{
-		FVector NewLocation = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + (CurrentUpVelocity * DeltaTime));
-		this->SetActorLocation(NewLocation);
-	}
-
 }
 
 // Called to bind functionality to input
@@ -94,7 +87,6 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	// Bind our control axis' to callback functions
 	PlayerInputComponent->BindAxis("Thrust", this, &ASCharacter::Thrust);
-	PlayerInputComponent->BindAxis("MoveUp", this, &ASCharacter::MoveUp);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASCharacter::MoveRight);
 
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APawn::AddControllerYawInput);
@@ -118,11 +110,6 @@ void ASCharacter::Thrust(float Val)
 }
 
 
-void ASCharacter::MoveUp(float Val)
-{
-	CurrentUpVelocity = UpMaxVelocity * Val;
-}
-
 // Move Ship to the Right/Left
 void ASCharacter::MoveRight(float Val)
 {
@@ -130,7 +117,7 @@ void ASCharacter::MoveRight(float Val)
 
 	// Smoothly interpolate to target yaw speed
 	CurrentYawSpeed = FMath::FInterpTo(CurrentYawSpeed, TargetYawSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
-
+	
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
 	ControlRot.Roll = 0.0f;
@@ -181,6 +168,13 @@ void ASCharacter::OnHealtChange(AActor* InstigatorActor, USAttributeComponent* O
 {
 	if (NewHealth <= 0.0f && Delta > 0.f)
 	{
-		Destroy();
+		SetLifeSpan(0.5f);
 	}
+}
+
+void ASCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASCharacter, SMesh);
 }

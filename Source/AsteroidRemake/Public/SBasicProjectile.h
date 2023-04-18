@@ -27,11 +27,7 @@ public:
 	ASBasicProjectile();
 
 protected:
-
-	/*UPROPERTY(EditDefaultsOnly,Category="Damage")
-	TSubclassOf<USActionEffect> ActionEffectClass;*/
 	
-
 	UPROPERTY(EditDefaultsOnly, Category="Sound")
 	UAudioComponent* FlightLoopAudio;
 	

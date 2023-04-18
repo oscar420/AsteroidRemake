@@ -27,7 +27,6 @@ protected:
 
 public:
 	
-	//USAction_ProjectilePowerUp();
 	
 	virtual void StartAction_Implementation(AActor* Instigator) override;
 	

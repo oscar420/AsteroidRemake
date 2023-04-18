@@ -48,17 +48,13 @@ void USActionComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	//FString DebugMsg = GetNameSafe(GetOwner()) + ":" + ActiveGamePlayTags.ToStringSimple();
-	//GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::White, DebugMsg);
-
+	
 	// Draw all Actions
 	for (USAction* Action : Actions)
 	{
 		FColor TextColor = Action->IsRunning() ? FColor::Blue : FColor::White;
 		FString ActionMsg = FString::Printf(TEXT("[%s] Action: %s"), *GetNameSafe(GetOwner()), *GetNameSafe(Action));
 		
-		//LogOnScreen(this, ActionMsg, TextColor, 0.0f);
 	}
 }
 

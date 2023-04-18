@@ -4,6 +4,8 @@
 #include "SAsteroid.h"
 
 #include "SAttributeComponent.h"
+#include "SCharacter.h"
+#include "SGameplayFunctionLibrary.h"
 #include "SProjectile.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
@@ -34,6 +36,9 @@ ASAsteroid::ASAsteroid()
 
 	//CapsuleComp->OnComponentHit.AddDynamic(this, &ASAsteroid::OnActorHit);
 	AttributeComp->OnHealtChange.AddDynamic(this, &ASAsteroid::OnHealtChange);
+	CapsuleComp->OnComponentHit.AddDynamic(this, &ASAsteroid::OnActorHit);
+
+	ImpactDamage = 20.f;
 
 	bReplicates = true;
 }
@@ -55,25 +60,26 @@ void ASAsteroid::Tick(float DeltaTime)
 void ASAsteroid::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *GetNameSafe(OtherActor));
-	UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *GetNameSafe(OtherComp));
-	UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *GetNameSafe(HitComponent));
-	ASProjectile* Projectile = Cast<ASProjectile>(OtherActor);
-	
-	if (Projectile)
+	APawn* MyPawn = Cast<APawn>(OtherActor);
+	UE_LOG(LogTemp, Warning, TEXT("ActorHited"));
+	if (USGameplayFunctionLibrary::ApplyDirectionalDamage(this, OtherActor, ImpactDamage, Hit))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *GetNameSafe(Projectile));
-		Destroy();
+		UPrimitiveComponent* HitComp = Hit.GetComponent();
+		if (HitComp)
+		{
+			FVector Direction = Hit.TraceEnd - Hit.TraceStart;
+			Direction.Normalize();
+			HitComp->AddImpulseAtLocation(Direction * 30000.f, Hit.ImpactPoint);
+		}
 	}
 }
 
+
 void ASAsteroid::OnHealtChange(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	UE_LOG(LogTemp, Warning, TEXT("NewHealth: %f"), NewHealth);
-	UE_LOG(LogTemp, Warning, TEXT("Delta: %f"), Delta);
+	
 	if (NewHealth <= 0.0f && Delta > 0.f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Destroyed"));
 		Destroy();
 	}
 }

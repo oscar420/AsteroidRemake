@@ -14,7 +14,6 @@ void USAction::Initialize(USActionComponent* NewActionComp)
 void USAction::StartAction_Implementation(AActor* Instigator)
 {
 	UE_LOG(LogTemp, Log, TEXT("Running: %s"), *GetNameSafe(this))
-	//LogOnScreen(this, FString::Printf(TEXT("Started: %s"), *ActionName.ToString()), FColor::Green);
 
 	USActionComponent* Comp = GetOwningComponent();
 	Comp->ActiveGamePlayTags.AppendTags(GrantTag);
@@ -34,7 +33,6 @@ void USAction::StartAction_Implementation(AActor* Instigator)
 void USAction::StopAction_Implementation(AActor* Instigator)
 {
 	UE_LOG(LogTemp, Log, TEXT("Stopped: %s"), *GetNameSafe(this));
-	//LogOnScreen(this, FString::Printf(TEXT("Stoped: %s"), *ActionName.ToString()), FColor::White);
 
 	//ensureAlways(RepData.bIsRunning);
 
@@ -94,7 +92,7 @@ void USAction::OnRep_RepData()
 {
 	if (RepData.bIsRunning)
 	{
-		StartAction(RepData.Instigator);
+		StartAction(RepData. Instigator);
 	}
 	else
 	{

@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "SPlayerController.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPawnChange, APawn*, NewPawn);
+
 /**
  * 
  */
@@ -13,5 +15,12 @@ UCLASS()
 class ASTEROIDREMAKE_API ASPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPawnChange OnPawnChange;
+	
+	virtual void SetPawn(APawn* InPawn) override;
 	
 };

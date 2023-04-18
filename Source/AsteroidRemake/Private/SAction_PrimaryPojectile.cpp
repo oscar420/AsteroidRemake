@@ -27,7 +27,7 @@ void USAction_PrimaryPojectile::StartAction_Implementation(AActor* Instigator)
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Instigator = Character;
-		UE_LOG(LogTemp, Warning, TEXT("Intigator Action: %s"), *GetNameSafe(Character));
+		
 
 		FCollisionShape Shape;
 		Shape.SetSphere(20.f);
@@ -48,7 +48,7 @@ void USAction_PrimaryPojectile::StartAction_Implementation(AActor* Instigator)
 			return;
 		}
 		FVector TraceStart = InstigatorCharacter->GetPawnViewLocation();
-		//FRotator CameraRotator = CamaraComp->GetComponentRotation();
+		
 		FVector TraceEnd = TraceStart + (Character->GetControlRotation().Vector() * Range);
 		
 		bool bSucces = GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjParams, Shape, QueryParams);
@@ -56,7 +56,7 @@ void USAction_PrimaryPojectile::StartAction_Implementation(AActor* Instigator)
 		if (bSucces)
 		{
 			TraceEnd = Hit.ImpactPoint;
-			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 32, FColor::Green, false, 2.0f);
+			//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.f, 32, FColor::Green, false, 2.0f);
 		}
 	
 		FRotator CorrectRotation1 = FRotationMatrix::MakeFromX(TraceEnd - SocketLocation1).Rotator();
